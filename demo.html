@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf-8'/>
+	<title>这是一个前后端分离，完整的前后端交互例子</title>
+	<style type="text/css">
+		th{
+			border: solid #ccc 1px;
+			width: 300px;
+		}
+	</style>
+</head>
+<body>
+
+<button id='btn'>点击我加载表格</button>
+<table id='table'>
+	
+</table>
+
+<!--引入新浪jquery cdn文件-->
+<script src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#btn").click(function(){
+		$(".list").remove();
+		$.ajax({
+			url:'http://120.25.152.42:4000/getDepartmentname',//请求后台的接口
+			type:'get',//请求方式
+			dataType:'json',//data type为json格式
+			success:function(data){//请求成功之后的回调函数,data为后台返回的数据对象
+				var list = "<tr class='list'>"
+							+"	<th>序号</th>"
+							+"	<th>街道编号</th>"
+							+"	<th>街道名称</th>"
+							+"</tr>";
+				for(var index=0;index<data.length;index++){
+					var value = data[index];
+					var subdiv = '<tr class="list">'
+								+	'<th>'+(index+1)+'</th>'
+								+	'<th>'+value.departmentcode+'</th>'
+								+	'<th>'+value.departmentname+'</th>'
+								+'</tr>';
+					list = list + subdiv;
+				}
+				//list变量通过字符串拼接的形式组成了table的dom数据
+				$("#table").append(list);//把拼接的DOM插入到id为table的元素文档流里面
+			}
+		});
+	});
+});
+</script>
+</body>
+</html>
